@@ -3,7 +3,7 @@ var client = new HttpClient();
 var request = new HttpRequestMessage
 {
     Method = HttpMethod.Get,
-    RequestUri = new Uri("http://mockbin.com/har?foo%5Bbar%5D=baz%2Czap&fiz=buz&key=value"),
+    RequestUri = new Uri("http://mockbin.com/har?foo[bar]=baz,zap&fiz=buz&key=value"),
 };
 using (var response = await client.SendAsync(request))
 {

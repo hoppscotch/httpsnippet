@@ -315,7 +315,7 @@ export class HTTPSnippet {
     return {
       ...request,
       allHeaders,
-      fullUrl:decodedFullUrl,
+      fullUrl: decodedFullUrl,
       url,
       uriObj,
     };

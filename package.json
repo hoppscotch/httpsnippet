@@ -54,7 +54,9 @@
     "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\"",
     "build": "tsc --build tsconfig.build.json",
     "build:types": "tsc -d --declarationDir dist/lib --declarationMap --emitDeclarationOnly",
-    "test": "jest"
+    "test": "jest",
+    "dev": "tsc --watch --preserveWatchOutput",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@types/eslint": "^8.4.1",

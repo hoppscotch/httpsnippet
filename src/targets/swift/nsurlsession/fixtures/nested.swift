@@ -1,6 +1,6 @@
 import Foundation
 
-let request = NSMutableURLRequest(url: NSURL(string: "http://mockbin.com/har?foo%5Bbar%5D=baz%2Czap&fiz=buz&key=value")! as URL,
+let request = NSMutableURLRequest(url: NSURL(string: "http://mockbin.com/har?foo[bar]=baz,zap&fiz=buz&key=value")! as URL,
                                         cachePolicy: .useProtocolCachePolicy,
                                     timeoutInterval: 10.0)
 request.httpMethod = "GET"
