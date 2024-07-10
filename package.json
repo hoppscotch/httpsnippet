@@ -1,9 +1,9 @@
 {
   "version": "3.0.4",
-  "name": "httpsnippet",
+  "name": "@hoppscotch/httpsnippet",
   "description": "HTTP Request snippet generator for *most* languages",
-  "author": "Kong <office@konghq.com>",
-  "homepage": "https://github.com/Kong/httpsnippet",
+  "author": "Hoppscotch Team <support@hoppscotch.io>",
+  "homepage": "https://github.com/Hoppscotch/httpsnippet",
   "license": "MIT",
   "main": "dist/httpsnippet.js",
   "types": "dist/httpsnippet.d.ts",
@@ -39,11 +39,11 @@
     "xmlhttprequest"
   ],
   "engines": {
-    "node": "^14.19.1 || ^16.14.2 || ^18.0.0 || ^20.0.0"
+    "node": "^14.19.1 || ^16.14.2 || ^18.0.0 "
   },
-  "repository": "Kong/httpsnippet",
+  "repository": "Hoppscotch/httpsnippet",
   "bugs": {
-    "url": "https://github.com/Kong/httpsnippet/issues"
+    "url": "https://github.com/Hoppscotch/httpsnippet/issues"
   },
   "scripts": {
     "clean": "tsc --build tsconfig.build.json --clean",
