@@ -1,4 +1,5 @@
 import { mimetypes } from './fixtures/mimetypes';
+import full from './fixtures/requests/full.json';
 import headers from './fixtures/requests/headers.json';
 import query from './fixtures/requests/query.json';
 import short from './fixtures/requests/short.json';
@@ -215,6 +216,34 @@ describe('hTTPSnippet', () => {
 
         expect(request.fullUrl).toBe('http://mockbin.com/har?foo=bar&foo=baz&baz=abc&key=value');
       });
+    });
+  });
+
+  describe('queryObj', () => {
+    it('should build queryObj with arrays for duplicate keys', () => {
+      const snippet = new HTTPSnippet(full as Request);
+      const request = snippet.requests[0];
+
+      expect(request.queryObj).toMatchObject({
+        key: 'value',
+        foo: ['bar', 'baz'],
+        baz: 'abc',
+      });
+    });
+
+    it('should not include array-indexed query keys like foo[0]', () => {
+      const snippet = new HTTPSnippet(full as Request);
+      const curl = snippet.convert('shell', 'curl');
+
+      expect(curl).not.toMatch(/foo\[\d+\]=/);
+    });
+
+    it('should handle empty queryString array gracefully', () => {
+      const snippet = new HTTPSnippet(short as Request);
+
+      const curl = snippet.convert('shell', 'curl');
+
+      expect(curl).toContain('--url http://mockbin.com/har');
     });
   });
 });
