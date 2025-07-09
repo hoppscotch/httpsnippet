@@ -6,6 +6,7 @@ import { format as urlFormat, parse as urlParse, UrlWithParsedQuery } from 'url'
 
 import { formDataIterator, isBlob } from './helpers/form-data';
 import { getHeaderName } from './helpers/headers';
+import { getQueryString } from './helpers/query-params';
 import { ReducedHelperObject, reducer } from './helpers/reducer';
 import { ClientId, TargetId, targets } from './targets/targets';
 
@@ -308,7 +309,7 @@ export class HTTPSnippet {
     }; //?
 
     // reset uriObj values for a clean url
-    const search = queryStringify(request.queryObj);
+    const search = getQueryString(request.queryObj);
 
     const uriObj = {
       ...urlWithParsedQuery,
