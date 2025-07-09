@@ -1,7 +1,6 @@
 import { map as eventStreamMap } from 'event-stream';
 import FormData from 'form-data/lib/form_data';
 import { Param, PostDataCommon, Request as NpmHarRequest } from 'har-format';
-import { validateRequest } from 'har-validator-compiled';
 import { stringify as queryStringify } from 'querystring';
 import { format as urlFormat, parse as urlParse, UrlWithParsedQuery } from 'url';
 
@@ -37,6 +36,19 @@ type PostDataBase = PostDataCommon & {
   text?: string;
   params?: Param[];
 };
+
+/**
+ * Regex to match environment variables in the format `<<variable_name>>`.
+ * This is used to identify if the request contains environment variables that need to be handled specially.
+ */
+const HOPP_ENVIRONMENT_REGEX = /(<<[a-zA-Z0-9-_]+>>)/g;
+
+/**
+ *
+ * @param str The string to test for environment variables.
+ * @returns A boolean indicating whether the string contains environment variables.
+ */
+const isContainsEnvVariables = (str: string) => HOPP_ENVIRONMENT_REGEX.test(str);
 
 export type HarRequest = Omit<NpmHarRequest, 'postData'> & { postData: PostDataBase };
 
@@ -113,8 +125,13 @@ export class HTTPSnippet {
         },
       };
 
-      if (validateRequest(req)) {
-        this.requests.push(this.prepare(req));
+      // if the request has a url, prepare it
+      // otherwise, skip it
+      // Note: Validation for URLs (validateRequest ) containing `<<` is skipped to support secret environment variables
+      // in code generation, as used in the Hoppscotch app.
+
+      if (req.url) {
+        this.requests.push(this.prepare(req as HarRequest));
       }
     });
   }
@@ -312,7 +329,16 @@ export class HTTPSnippet {
       ...uriObj,
     }); //?
 
-    const decodedFullUrl = decodeURIComponent(fullUrl);
+    const decodedURL = decodeURIComponent(fullUrl);
+
+    // if the URL contains environment variables, decode it without decoding the environment variables
+    // this is to ensure that environment variables are not decoded and remain in the format `<<variable_name>>`
+    // this is useful for code generation where environment variables are used to store sensitive information
+    // such as API keys, secrets, etc.
+    // if the URL does not contain environment variables, decode it normally
+    const decodedFullUrl = isContainsEnvVariables(decodedURL)
+      ? decodeURIComponent(fullUrl)
+      : fullUrl;
 
     return {
       ...request,
